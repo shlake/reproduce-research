@@ -9,16 +9,39 @@ _Intro and Data Source from Course assignment description_
 This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
 ##Data Source
-*Data Citation:*  
+**Dataset** Available here: [https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip)
 
-```{r}
-summary(cars)
+**Fileformat** CSV
+
+17,568 observations
+
+**Variables:**
+
+* _steps_: Number of steps taking in a 5-minute interval (missing values are coded as NA)
+
+* _date_: The date on which the measurement was taken in YYYY-MM-DD format
+
+* _interval_: Identifier for the 5-minute interval in which measurement was taken
+
+
+```{r setoptions, echo=TRUE}
 ```
 
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
+##Loading and preprocessing the data
+```{r readData}
+activity <- read.csv("./activity.csv")
+summary(activity)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+##Histogram of total number of steps taken per day
+```{r historgram}
+hist(tapply(activity$steps,activity$date,sum))
+```
+
+
+##Calculate mean and median total number of steps taken per day
+```{r totalsteps}
+tapply(activity$steps,activity$date,mean)
+tapply(activity$steps,activity$date,median)
+```
+
