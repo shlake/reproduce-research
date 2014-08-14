@@ -35,13 +35,38 @@ summary(activity)
 
 ##Histogram of total number of steps taken per day
 ```{r historgram}
-hist(tapply(activity$steps,activity$date,sum))
+hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
 ```
 
 
 ##Calculate mean and median total number of steps taken per day
 ```{r totalsteps}
-tapply(activity$steps,activity$date,mean)
-tapply(activity$steps,activity$date,median)
+meanSteps <- mean(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
+medianSteps <- median(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
+print(paste0("Mean total number of steps taken per day is: ", meanSteps), digits = 2)
+print(paste0("Median total number of steps taken per day is: ", medianSteps))
 ```
 
+##Average daily activity pattern
+```{r activitypattern}
+
+avgStepsInt <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
+plot(names(avgStepsInt), avgStepsInt, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
+
+## which.max gives index number of the max 5-minute value, so to get the
+## max value - which is a lable, make the label a numeric
+
+print(paste0("Interval ", as.numeric(names(which.max(avgStepsInt))) , " contains the maximum number of steps."))
+
+```
+
+##Imputing Missing Values
+
+Calculate and report the total number of missing values in the dataset
+
+```{r missingValues}
+
+print(paste0("There are ", sum(is.na(activity)) , " missing values in the dataset."))
+
+```
+The strategy I will use to fill all missing values (replace w/....)
