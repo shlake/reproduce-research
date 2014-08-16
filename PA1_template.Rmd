@@ -33,13 +33,15 @@ activity <- read.csv("./activity.csv")
 summary(activity)
 ```
 
-##Histogram of total number of steps taken per day
+##Total Number of Steps Taken Per Day
+
+###Histogram of total number of steps taken per day
 ```{r historgram}
 hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
 ```
 
 
-##Calculate mean and median total number of steps taken per day
+###Calculate mean and median total number of steps taken per day
 ```{r totalsteps}
 meanSteps <- mean(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
 medianSteps <- median(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
@@ -48,6 +50,8 @@ print(paste0("Median total number of steps taken per day is: ", medianSteps))
 ```
 
 ##Average daily activity pattern
+
+###Time Series Plot, Interval with Max number of steps
 ```{r activitypattern}
 
 avgStepsInt <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
@@ -69,4 +73,80 @@ Calculate and report the total number of missing values in the dataset
 print(paste0("There are ", sum(is.na(activity)) , " missing values in the dataset."))
 
 ```
-The strategy I will use to fill all missing values (replace w/....)
+
+###Strategy for filling in missing values in the dataset
+
+My initial strategy was to 
+
+* calculate the mean number of steps per day
+* calucalte the mean number of steps per time interval
+* take the average of the above 2 means
+
+But after taking the mean number of steps per day, I realized that there are days with NA which could not be averaged with the mean of the interval. So my final strategy was:
+
+* calculate the mean number of steps per time interval
+
+###Create a new dataset
+Using the above strategy replace the missing values in the activity dataset with the new mean
+
+```{r replaceMissingValues}
+
+## make a copy of activity so to change the copy and not the original
+activityNoNA <- activity
+
+meanInterval <-tapply(activity$steps, activity$interval,mean, na.rm=TRUE)
+
+## create an index of NAs and loop through the index in the activityNoNA file
+## replacing NAs with the mean for that interval
+
+for (i in which(is.na(activityNoNA)))
+    {
+    activityNoNA[i,1] <- meanInterval[((i-1)%%288)+1]
+    }
+
+##new dataset is activityNoNA
+
+```
+
+###Historgram with new Dataset
+```{r newHistorgram}
+hist(tapply(activityNoNA$steps,activityNoNA$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
+```
+
+
+###Calculate mean and median total number of steps taken per day
+```{r Newtotalsteps}
+meanSteps <- mean(tapply(activityNoNA$steps,activityNoNA$date,sum), na.rm=TRUE)
+medianSteps <- median(tapply(activityNoNA$steps,activityNoNA$date,sum), na.rm=TRUE)
+print(paste0("Mean total number of steps taken per day is: ", meanSteps), digits = 2)
+print(paste0("Median total number of steps taken per day is: ", medianSteps))
+```
+
+The value for mean in my new file is the same in as the original file. The median for my new file is now the same as the mean. 
+
+Imputing missing data for missing data increased the number of steps taken per day. 
+
+##Difference in Activity Patterns Between Weeekdays and Weekends?
+
+For this analysis the dataset w/out NA will be used, activityNoNA
+
+###Adding new variable for weekend/weekday
+
+
+``` {r WeekendWeekdayPlot}
+
+weekend <- c("Sunday","Saturday")
+
+## Check for day of week as a weekend, if not, it's a weekday
+
+if (any(weekdays(as.Date(activityNoNA[2000,2])) == weekend)) 
+    {
+    ##add weekend to new column for that row
+    ##else add weekday to new column for that row
+    }
+
+```
+
+###Weekday/weekend charts
+Time series plt of 5-minute interval
+
