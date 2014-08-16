@@ -171,19 +171,28 @@ print(paste0(&quot;Mean total number of steps taken per day is: &quot;, meanStep
 </div>
 <div id="difference-in-activity-patterns-between-weeekdays-and-weekends" class="section level2">
 <h2>Difference in Activity Patterns Between Weeekdays and Weekends?</h2>
-<p>For this analysis the dataset w/out NA will be used, activityNoNA</p>
+<p>For this analysis the dataset with NAs replaced will be used, activityNoNA</p>
 <div id="adding-new-variable-for-weekendweekday" class="section level3">
 <h3>Adding new variable for weekend/weekday</h3>
+<p>Add a new column to the new activity file specifying the day of the week. Then the data will be plotted as a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).</p>
 <pre class="r"><code>weekend &lt;- c(&quot;Sunday&quot;,&quot;Saturday&quot;)
 
-## Check for day of week as a weekend, if not, it's a weekday
+dayWeek &lt;- c()
 
-if (any(weekdays(as.Date(activityNoNA[2000,2])) == weekend)) 
+## Check for day of week as a weekend, if not, it's a weekday
+for (i in 1:length(activityNoNA$steps))
     {
-    ##add weekend to new column for that row
-    ##else add weekday to new column for that row
-    }</code></pre>
-<pre><code>## NULL</code></pre>
+    if (any(weekdays(as.Date(activityNoNA[i,2])) == weekend)) 
+        {
+            ##add &quot;weekend&quot;&quot; to new column for that row
+            dayWeek[i] &lt;- &quot;weekend&quot;  }
+            ##else add &quot;weekday&quot;&quot; to new column for that row
+        else { dayWeek[i] &lt;- &quot;weekday&quot;
+         }
+    }
+## Combine activity file with dayweek column
+
+    activityNoNA &lt;- cbind(activityNoNA,dayWeek)</code></pre>
 </div>
 <div id="weekdayweekend-charts" class="section level3">
 <h3>Weekday/weekend charts</h3>

@@ -128,22 +128,36 @@ Imputing missing data for missing data increased the number of steps taken per d
 
 ##Difference in Activity Patterns Between Weeekdays and Weekends?
 
-For this analysis the dataset w/out NA will be used, activityNoNA
+For this analysis the dataset with NAs replaced will be used, activityNoNA
 
 ###Adding new variable for weekend/weekday
+
+Add a new column to the new activity file specifying the day of the week.
+Then the data will be plotted as a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
 ``` {r WeekendWeekdayPlot}
 
 weekend <- c("Sunday","Saturday")
 
-## Check for day of week as a weekend, if not, it's a weekday
+dayWeek <- c()
 
-if (any(weekdays(as.Date(activityNoNA[2000,2])) == weekend)) 
+## Check for day of week as a weekend, if not, it's a weekday
+for (i in 1:length(activityNoNA$steps))
     {
-    ##add weekend to new column for that row
-    ##else add weekday to new column for that row
+    if (any(weekdays(as.Date(activityNoNA[i,2])) == weekend)) 
+        {
+            ##add "weekend"" to new column for that row
+            dayWeek[i] <- "weekend"  }
+            ##else add "weekday"" to new column for that row
+        else { dayWeek[i] <- "weekday"
+         }
     }
+## Combine activity file with dayweek column
+
+    activityNoNA <- cbind(activityNoNA,dayWeek)
+
+
 
 ```
 
