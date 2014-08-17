@@ -49,33 +49,10 @@ summary(activity)
 ###Histogram of total number of steps taken per day
 
 ```r
-print(hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps"))
+hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
 ```
 
 ![plot of chunk historgram](figure/historgram.png) 
-
-```
-## $breaks
-## [1]     0  5000 10000 15000 20000 25000
-## 
-## $counts
-## [1]  5 12 28  6  2
-## 
-## $density
-## [1] 1.887e-05 4.528e-05 1.057e-04 2.264e-05 7.547e-06
-## 
-## $mids
-## [1]  2500  7500 12500 17500 22500
-## 
-## $xname
-## [1] "tapply(activity$steps, activity$date, sum)"
-## 
-## $equidist
-## [1] TRUE
-## 
-## attr(,"class")
-## [1] "histogram"
-```
 
 
 ###Calculate mean and median total number of steps taken per day
@@ -236,10 +213,7 @@ Time series plot of 5-minute interval
 
 
 ```r
-##page w/ example   http://www.stat.ubc.ca/~jenny/STAT545A/block09_xyplotLattice.html
-
-
-library(lattice)
+##library(lattice)
 
 ##split dataset into weekend rows and weekday rows
 ## change the resulting lists to dataframes
@@ -251,5 +225,15 @@ wkEnd <- do.call(rbind.data.frame,a[2])
     
 avgStepsIntwkDay <- tapply(wkDays$steps,wkDays$interval,mean)
 avgStepsIntwkEnd <- tapply(wkEnd$steps,wkEnd$interval,mean)
+
+##xyplot(names(avgStepsInt) ~ avgStepsIntwkDay | c("weekday","weekend"), avgStepsIntwkEnd, type="l",main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
+
+##plot(names(avgStepsInt), avgStepsIntwkDay, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
+
+par(mfrow=c(2,1))
+plot(names(avgStepsInt), avgStepsIntwkDay, type="l", main = "Time Series Plot Weekday", xlab="5-minute Intervals", ylab="Avg Steps")
+plot(names(avgStepsInt), avgStepsIntwkEnd, type="l", main = "Time Series Plot Weekend", xlab="5-minute Intervals", ylab="Avg Steps")
 ```
+
+![plot of chunk weekDayWeekEnd](figure/weekDayWeekEnd.png) 
 
