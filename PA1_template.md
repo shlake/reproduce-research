@@ -213,26 +213,10 @@ Time series plot of 5-minute interval
 
 
 ```r
-##library(lattice)
+library(lattice)
 
-##split dataset into weekend rows and weekday rows
-## change the resulting lists to dataframes
-
-a <- split(activityNoNA, activityNoNA$dayWeek)
-wkDays <- do.call(rbind.data.frame,a[1])
-wkEnd <- do.call(rbind.data.frame,a[2])
-
-    
-avgStepsIntwkDay <- tapply(wkDays$steps,wkDays$interval,mean)
-avgStepsIntwkEnd <- tapply(wkEnd$steps,wkEnd$interval,mean)
-
-##xyplot(names(avgStepsInt) ~ avgStepsIntwkDay | c("weekday","weekend"), avgStepsIntwkEnd, type="l",main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
-
-##plot(names(avgStepsInt), avgStepsIntwkDay, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
-
-par(mfrow=c(2,1))
-plot(names(avgStepsInt), avgStepsIntwkDay, type="l", main = "Time Series Plot Weekday", xlab="5-minute Intervals", ylab="Avg Steps")
-plot(names(avgStepsInt), avgStepsIntwkEnd, type="l", main = "Time Series Plot Weekend", xlab="5-minute Intervals", ylab="Avg Steps")
+xyplot(steps ~ interval | dayWeek, activityNoNA, layout=c(1,2),
+type="l",main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
 ```
 
 ![plot of chunk weekDayWeekEnd](figure/weekDayWeekEnd.png) 
