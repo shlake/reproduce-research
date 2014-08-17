@@ -24,54 +24,90 @@ This assignment makes use of data from a personal activity monitoring device. Th
 * _interval_: Identifier for the 5-minute interval in which measurement was taken
 
 
-```{r setoptions, echo=TRUE}
-```
+
 
 ##Loading and preprocessing the data
-```{r readData}
+
+```r
 activity <- read.csv("./activity.csv")
 summary(activity)
+```
+
+```
+##      steps               date          interval   
+##  Min.   :  0.0   2012-10-01:  288   Min.   :   0  
+##  1st Qu.:  0.0   2012-10-02:  288   1st Qu.: 589  
+##  Median :  0.0   2012-10-03:  288   Median :1178  
+##  Mean   : 37.4   2012-10-04:  288   Mean   :1178  
+##  3rd Qu.: 12.0   2012-10-05:  288   3rd Qu.:1766  
+##  Max.   :806.0   2012-10-06:  288   Max.   :2355  
+##  NA's   :2304    (Other)   :15840
 ```
 
 ##Total Number of Steps Taken Per Day
 
 ###Histogram of total number of steps taken per day
-```{r historgram}
+
+```r
 hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
 ```
 
+![plot of chunk historgram](figure/historgram.png) 
+
 
 ###Calculate mean and median total number of steps taken per day
-```{r totalsteps}
+
+```r
 meanSteps <- mean(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
 medianSteps <- median(tapply(activity$steps,activity$date,sum), na.rm=TRUE)
 print(paste0("Mean total number of steps taken per day is: ", meanSteps), digits = 2)
+```
+
+```
+## [1] "Mean total number of steps taken per day is: 10766.1886792453"
+```
+
+```r
 print(paste0("Median total number of steps taken per day is: ", medianSteps))
+```
+
+```
+## [1] "Median total number of steps taken per day is: 10765"
 ```
 
 ##Average daily activity pattern
 
 ###Time Series Plot, Interval with Max number of steps
-```{r activitypattern}
 
+```r
 avgStepsInt <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
 plot(names(avgStepsInt), avgStepsInt, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
+```
 
+![plot of chunk activitypattern](figure/activitypattern.png) 
+
+```r
 ## which.max gives index number of the max 5-minute value, so to get the
 ## max value - which is a lable, make the label a numeric
 
 print(paste0("Interval ", as.numeric(names(which.max(avgStepsInt))) , " contains the maximum number of steps."))
+```
 
+```
+## [1] "Interval 835 contains the maximum number of steps."
 ```
 
 ##Imputing Missing Values
 
 Calculate and report the total number of missing values in the dataset
 
-```{r missingValues}
 
+```r
 print(paste0("There are ", sum(is.na(activity)) , " missing values in the dataset."))
+```
 
+```
+## [1] "There are 2304 missing values in the dataset."
 ```
 
 ###Strategy for filling in missing values in the dataset
@@ -89,8 +125,8 @@ But after taking the mean number of steps per day, I realized that there are day
 ###Create a new dataset
 Using the above strategy replace the missing values in the activity dataset with the new mean
 
-```{r replaceMissingValues}
 
+```r
 ## make a copy of activity so to change the copy and not the original
 activityNoNA <- activity
 
@@ -105,21 +141,35 @@ for (i in which(is.na(activityNoNA)))
     }
 
 ##new dataset is activityNoNA
-
 ```
 
 ###Historgram with new Dataset
-```{r newHistorgram}
+
+```r
 hist(tapply(activityNoNA$steps,activityNoNA$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
 ```
 
+![plot of chunk newHistorgram](figure/newHistorgram.png) 
+
 
 ###Calculate mean and median total number of steps taken per day
-```{r Newtotalsteps}
+
+```r
 meanSteps <- mean(tapply(activityNoNA$steps,activityNoNA$date,sum), na.rm=TRUE)
 medianSteps <- median(tapply(activityNoNA$steps,activityNoNA$date,sum), na.rm=TRUE)
 print(paste0("Mean total number of steps taken per day is: ", meanSteps), digits = 2)
+```
+
+```
+## [1] "Mean total number of steps taken per day is: 10766.1886792453"
+```
+
+```r
 print(paste0("Median total number of steps taken per day is: ", medianSteps))
+```
+
+```
+## [1] "Median total number of steps taken per day is: 10766.1886792453"
 ```
 
 The value for mean in my new file is the same in as the original file. The median for my new file is now the same as the mean. 
@@ -136,8 +186,8 @@ Add a new column to the new activity file specifying the day of the week.
 Then the data will be plotted as a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
-``` {r WeekendWeekdayPlot}
 
+```r
 weekend <- c("Sunday","Saturday")
 
 dayWeek <- c()
@@ -156,25 +206,18 @@ for (i in 1:length(activityNoNA$steps))
 ## Combine activity file with dayweek column
 
     activityNoNA <- cbind(activityNoNA,dayWeek)
-
-
-
 ```
 
 ###Weekday/weekend charts
 Time series plot of 5-minute interval
 
-``` {r weekDayWeekEnd}
 
+```r
 ##avgStepsInt <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
 ##plot(names(avgStepsInt), avgStepsInt, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
 ##page w/ example   http://www.stat.ubc.ca/~jenny/STAT545A/block09_xyplotLattice.html
 
 
 library(lattice)
-
-
-
-
 ```
 
