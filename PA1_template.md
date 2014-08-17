@@ -215,7 +215,32 @@ Time series plot of 5-minute interval
 ```r
 library(lattice)
 
-xyplot(steps ~ interval | dayWeek, activityNoNA, layout=c(1,2),
+##split dataset into weekend rows and weekday rows
+## change the resulting lists to dataframes
+
+a <- split(activityNoNA, activityNoNA$dayWeek)
+wkDays <- do.call(rbind.data.frame,a[1])
+wkEnd <- do.call(rbind.data.frame,a[2])
+
+    
+avgStepsIntwkDay <- tapply(wkDays$steps,wkDays$interval,mean)
+avgStepsIntwkEnd <- tapply(wkEnd$steps,wkEnd$interval,mean)
+
+
+intPlotwd <- as.data.frame(cbind(avgStepsIntwkDay, as.numeric(as.character((names(avgStepsInt))))))
+intPlotwe <- as.data.frame(cbind(avgStepsIntwkEnd, as.numeric(as.character((names(avgStepsInt))))))
+
+df.intPlotwe <- cbind(intPlotwe, rep("weekend",288))
+df.intPlotwd <- cbind(intPlotwd, rep("weekday",288))
+
+colnames(df.intPlotwd) <- c("avgSteps", "interval","dayweek")
+colnames(df.intPlotwe) <- c("avgSteps", "interval","dayweek")
+
+
+intPlot <- rbind(df.intPlotwd, df.intPlotwe)
+
+
+xyplot(avgSteps ~ interval | dayweek, intPlot, layout=c(1,2),
 type="l",main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
 ```
 
