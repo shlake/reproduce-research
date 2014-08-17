@@ -8,9 +8,8 @@ To create a markdown file that knitr can process
 Due August 17, 2014
 R code to create html and md file:
 
-     __library(knitr)__
-
-     library(markdown)
+**library(knitr)**
+**library(markdown)**
 
      knit("PA1_template.Rmd")
 
