@@ -236,11 +236,20 @@ Time series plot of 5-minute interval
 
 
 ```r
-##avgStepsInt <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
-##plot(names(avgStepsInt), avgStepsInt, type="l", main = "Time Series Plot", xlab="5-minute Intervals", ylab="Avg Steps")
 ##page w/ example   http://www.stat.ubc.ca/~jenny/STAT545A/block09_xyplotLattice.html
 
 
 library(lattice)
+
+##split dataset into weekend rows and weekday rows
+## change the resulting lists to dataframes
+
+a <- split(activityNoNA, activityNoNA$dayWeek)
+wkDays <- do.call(rbind.data.frame,a[1])
+wkEnd <- do.call(rbind.data.frame,a[2])
+
+    
+avgStepsIntwkDay <- tapply(wkDays$steps,wkDays$interval,mean)
+avgStepsIntwkEnd <- tapply(wkEnd$steps,wkEnd$interval,mean)
 ```
 
