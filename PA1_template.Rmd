@@ -37,7 +37,7 @@ summary(activity)
 
 ###Histogram of total number of steps taken per day
 ```{r historgram}
-hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
+print(hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps"))
 ```
 
 

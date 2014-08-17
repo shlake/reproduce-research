@@ -49,10 +49,33 @@ summary(activity)
 ###Histogram of total number of steps taken per day
 
 ```r
-hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps")
+print(hist(tapply(activity$steps,activity$date,sum), main = paste("Histogram of Total Number of Steps Taken per Day"), xlab="Sum of Steps"))
 ```
 
 ![plot of chunk historgram](figure/historgram.png) 
+
+```
+## $breaks
+## [1]     0  5000 10000 15000 20000 25000
+## 
+## $counts
+## [1]  5 12 28  6  2
+## 
+## $density
+## [1] 1.887e-05 4.528e-05 1.057e-04 2.264e-05 7.547e-06
+## 
+## $mids
+## [1]  2500  7500 12500 17500 22500
+## 
+## $xname
+## [1] "tapply(activity$steps, activity$date, sum)"
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,"class")
+## [1] "histogram"
+```
 
 
 ###Calculate mean and median total number of steps taken per day
